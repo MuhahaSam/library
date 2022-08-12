@@ -1,0 +1,17 @@
+# ключи для jwt токена
+jwtKeys:
+  access: 'access'
+  refresh: 'refresh'
+
+# конфиг для базы данных
+DB:
+  host: 'localhost'
+  port: 5432
+  username: 'admin'
+  password: 'admin'
+  database: 'database'
+
+# ключ для создания админской учётки
+adminSecretKey: "admmin secret key"
+# префикс
+normalizedBasePath: 'lib'

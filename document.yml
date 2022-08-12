@@ -1,0 +1,178 @@
+openapi: 3.0.0
+paths:
+  /user/register:
+    post:
+      operationId: UserController_createUser
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDTO'
+      responses:
+        '201':
+          description: ''
+  /user/login:
+    post:
+      operationId: UserController_login
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthDTO'
+      responses:
+        '200':
+          description: ''
+  /user/login/admin:
+    post:
+      operationId: UserController_loginAdmin
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthDTO'
+      responses:
+        '200':
+          description: ''
+  /user/logout:
+    post:
+      operationId: UserController_logout
+      parameters: []
+      responses:
+        '200':
+          description: ''
+  /user/refresh:
+    post:
+      operationId: UserController_refreshTokens
+      parameters: []
+      responses:
+        '200':
+          description: ''
+  /book/genre-book-tree:
+    get:
+      operationId: BookController_getGenreBookTree
+      parameters: []
+      responses:
+        '200':
+          description: ''
+  /book/by-name-author:
+    get:
+      operationId: BookController_getBookByNameAndAuthor
+      parameters: []
+      responses:
+        '200':
+          description: ''
+  /book/book:
+    put:
+      operationId: BookController_putNewBook
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookDTO'
+      responses:
+        '200':
+          description: ''
+  /userBook/booking:
+    put:
+      operationId: UserBookController_putRequestForBooking
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookIdDTO'
+      responses:
+        '200':
+          description: ''
+  /userBook/all-requests:
+    get:
+      operationId: UserBookController_getAllBookingRequests
+      parameters: []
+      responses:
+        '200':
+          description: ''
+  /userBook/manage-booking:
+    put:
+      operationId: UserBookController_putBookingRequestManage
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserBookingManageDTO'
+      responses:
+        '200':
+          description: ''
+  /userBook/receive-book:
+    put:
+      operationId: UserBookController_putUserBookReceiving
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserBookReceiveDTO'
+      responses:
+        '200':
+          description: ''
+  /author/byfullname:
+    get:
+      operationId: AuthorController_getAuthorByFullName
+      parameters: []
+      responses:
+        '200':
+          description: ''
+  /author/author:
+    put:
+      operationId: AuthorController_putNewAuthor
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAuthorDTO'
+      responses:
+        '200':
+          description: ''
+info:
+  title: Timetable List API
+  description: EU module for scheduling
+  version: v1
+  contact: {}
+tags: []
+servers: []
+components:
+  schemas:
+    UserDTO:
+      type: object
+      properties: {}
+    AuthDTO:
+      type: object
+      properties: {}
+    BookDTO:
+      type: object
+      properties: {}
+    BookIdDTO:
+      type: object
+      properties: {}
+    UserBookingManageDTO:
+      type: object
+      properties: {}
+    UserBookReceiveDTO:
+      type: object
+      properties: {}
+    CreateAuthorDTO:
+      type: object
+      properties: {}
