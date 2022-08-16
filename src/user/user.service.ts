@@ -117,4 +117,9 @@ export class UserService {
           refresh: refrToken
       }
   }
+
+  async isAdmin(id:number): Promise<void>{
+    const user = await this.userRepository.findOne({ where:{ id:id } })
+    if (user.permission !== 'admin') throw new ForbiddenException('Access Denied')
+  }
 }

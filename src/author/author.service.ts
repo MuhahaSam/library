@@ -2,12 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Author } from './entity/author.entity'
+import { UserService } from '@/user/user.service';
 
 @Injectable()
 export class AuthorService {
     constructor (
         @InjectRepository(Author)
-        private readonly authorRepository: Repository<Author>
+        private readonly authorRepository: Repository<Author>,
+
+        private readonly userService: UserService
     ){}
 
     async getAuthorByFullName(lastName: string, firstName?: string, middleName?: string): Promise<Author[]>{
@@ -23,7 +26,8 @@ export class AuthorService {
             .getMany())
     }
 
-    async putNewAuthor(author: Author): Promise<Author>{
+    async putNewAuthor(author: Author, adminId): Promise<Author>{
+        this.userService.isAdmin(adminId)
         return await this.authorRepository.save(author)
     }
 }

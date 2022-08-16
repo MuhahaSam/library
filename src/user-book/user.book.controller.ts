@@ -27,8 +27,8 @@ export class UserBookController {
 
     @Get('all-requests')
     @UseGuards(RoleGuard('admin'))
-    async getAllBookingRequests(@GetCurrentUserId() userId:number){
-        return this.userBookService.getAllBookingRequests(userId)
+    async getAllBookingRequests(@GetCurrentUserId() adminId:number){
+        return this.userBookService.getAllBookingRequests(adminId)
     }
 
     @Put('manage-booking')
@@ -39,7 +39,7 @@ export class UserBookController {
 
     @Put('receive-book')
     @UseGuards(RoleGuard('admin'))
-    async putUserBookReceiving(@Body() body:UserBookReceiveDTO):Promise<boolean> {
-        return this.userBookService.putUserBookReceiving(body.bookId, body.userId)
+    async putUserBookReceiving(@Body() body:UserBookReceiveDTO,  @GetCurrentUserId() adminId:number):Promise<boolean> {
+        return this.userBookService.putUserBookReceiving(body.bookId, body.userId, adminId)
     }
 }

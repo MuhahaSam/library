@@ -5,12 +5,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { GenreBookTree } from '@/interfaces/book.interface';
 import { BookInfo } from '@/interfaces/book.interface';
 import { BookDTO } from './book.dto';
+import { UserService } from '@/user/user.service';
 
 @Injectable()
 export class BookService {
     constructor(
         @InjectRepository(Book)
-        private readonly bookRepository: Repository<Book>
+        private readonly bookRepository: Repository<Book>,
+
+        private readonly  userService:  UserService
     ){}
 
     async genreBookTree(): Promise<GenreBookTree>{
@@ -103,7 +106,9 @@ export class BookService {
         })
     }
 
-    async putNewBook(book: BookDTO){
+    async putNewBook(book: BookDTO, adminId:number){
+        await this.userService.isAdmin(adminId)
+        
         return (await this.bookRepository.save(book).catch(e=>{
             if (e.code === '23505') throw new ForbiddenException('such book is exist')
         }))

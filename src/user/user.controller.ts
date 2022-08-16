@@ -49,7 +49,7 @@ export class UserController {
 
     @Post('logout')
     @HttpCode(HttpStatus.OK)
-    logout(@GetCurrentUserId() userId: number): Promise<boolean> {
+    logout(@GetCurrentUserId() userId: number): Promise<boolean>{
         return this.userService.logOut(userId)
     }
 
@@ -57,7 +57,7 @@ export class UserController {
     @UseGuards(RtGuard)
     @Post('refresh')
     @HttpCode(HttpStatus.OK)
-    refreshTokens(@GetCurrentUserId() userId:number , @GetCurrentUser('token') refreshToken: string,): Promise<Tokens> {
+    refreshTokens(@GetCurrentUserId() userId:number , @GetCurrentUser('token') refreshToken: string): Promise<Tokens> {
         return this.userService.refreshToken(userId, refreshToken)
-  }
+    }
 }

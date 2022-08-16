@@ -5,6 +5,7 @@ import { GenreBookTree } from '@/interfaces/book.interface';
 import { AuthorBookNameDTO, BookDTO } from './book.dto';
 import { BookInfo } from '@/interfaces/book.interface';
 import RoleGuard from '@/common/roles/role.decorator';
+import { GetCurrentUserId } from '@/common/decorators';
 
 @Controller('book')
 export class BookController {
@@ -24,8 +25,8 @@ export class BookController {
 
     @Put('book')
     @UseGuards(RoleGuard('admin'))
-    async putNewBook(@Body() body: BookDTO){
-        return this.bookService.putNewBook(body)
+    async putNewBook(@Body() body: BookDTO, @GetCurrentUserId() adminId:number){
+        return this.bookService.putNewBook(body, adminId)
     }
 
 }

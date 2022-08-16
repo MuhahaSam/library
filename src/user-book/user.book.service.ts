@@ -10,6 +10,7 @@ import {
 } from '@/interfaces/userBook.interface';
 import { User } from '@/user/entity/user.entity';
 import { UserBookingManageDTO } from './user.book.dto';
+import { UserService } from '@/user/user.service';
 @Injectable()
 export class UserBookService {
     constructor(
@@ -20,10 +21,13 @@ export class UserBookService {
         private readonly bookRepository: Repository<Book>,
 
         @InjectRepository(User)
-        private readonly userRepository: Repository<User>
+        private readonly userRepository: Repository<User>,
+
+        private readonly useService: UserService
     ){}
 
     async putRequestForbooking(userId: number, bookId: number): Promise<boolean>{
+
         const bookedBook = await this.bookRepository
         .createQueryBuilder('book')
         .leftJoinAndSelect('book.userBooks', 'userBooks')
@@ -53,6 +57,8 @@ export class UserBookService {
     }
 
     async getAllBookingRequests(adminId:number): Promise<UserBookingHistory[]>{
+        await this.useService.isAdmin(adminId)
+
         return (await this.userRepository
             .createQueryBuilder('user')
             .innerJoinAndSelect('user.userBooks', 'userbooks')
@@ -67,16 +73,17 @@ export class UserBookService {
                 'user.email',
                 `jsonb_agg(
                     jsonb_build_object(
-                    'id', book.id, 
-                    'name', book.name,
-                    'isbooking', book.isbooking,
-                    'genre', book.genre,
-                    'requestedDate', userbooks.request_date,
-                    'issuanceDateDate', userbooks.issuance_date,
-                    'planedReceivingDate', userbooks.planned_receiving_date,
-                    'realReceivingDate', userbooks.real_receiving_date,
-                    'userBookId', userbooks.id
-                    )) booking_history`
+                        'id', book.id, 
+                        'name', book.name,
+                        'isbooking', book.isbooking,
+                        'genre', book.genre,
+                        'requestedDate', userbooks.request_date,
+                        'issuanceDateDate', userbooks.issuance_date,
+                        'planedReceivingDate', userbooks.planned_receiving_date,
+                        'realReceivingDate', userbooks.real_receiving_date,
+                        'userBookId', userbooks.id
+                    )
+                ) booking_history`
             ])
             .groupBy('user.id')
             .getRawMany()).map(x=>{
@@ -90,10 +97,11 @@ export class UserBookService {
                 }
                 return bookingHistorySample
             })
-            
     }
 
     async putBookingRequestManage(userBookingAccess:UserBookingManageDTO, adminId:number): Promise<boolean>{
+        await this.useService.isAdmin(adminId)
+
         const currentDate = new Date(Date.now())
         const planedReceivingDate = new Date(Date.now())
         planedReceivingDate.setDate(planedReceivingDate.getDate() + userBookingAccess.bookingDays)
@@ -122,7 +130,9 @@ export class UserBookService {
        
     }
 
-    async putUserBookReceiving(bookId: number, userId: number): Promise<boolean>{
+    async putUserBookReceiving(bookId: number, userId:number , adminId: number): Promise<boolean>{
+        await this.useService.isAdmin(adminId)
+
         const updated = await this.userBookRepository.update({
             bookId: bookId,
             userId: userId,
