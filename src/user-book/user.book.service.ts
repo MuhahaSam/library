@@ -105,28 +105,27 @@ export class UserBookService {
         const currentDate = new Date(Date.now())
         const planedReceivingDate = new Date(Date.now())
         planedReceivingDate.setDate(planedReceivingDate.getDate() + userBookingAccess.bookingDays)
+        let updated
         if (userBookingAccess.status === 'access'){
-            const updated = await this.userBookRepository.update({
+            updated = await this.userBookRepository.update({
                 id: userBookingAccess.userBookId,
                 realReceivingDate: IsNull()
             },{
                 plannedReceivingDate : planedReceivingDate,
                 issuanceDate: currentDate,
                 adminId: adminId
-            })
-            if(updated.affected === 0) return false
-            return true
+            })  
         }else{
-            const updated = await this.userBookRepository.update({
+            updated = await this.userBookRepository.update({
                 id: userBookingAccess.userBookId,
                 realReceivingDate: IsNull()
             },{
                 rejectDate: currentDate,
                 adminId: adminId
             })
-            if(updated.affected === 0) return false
-            return false
         }
+        if(updated.affected === 0) return false
+        return true
        
     }
 
