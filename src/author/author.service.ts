@@ -27,7 +27,7 @@ export class AuthorService {
     }
 
     async putNewAuthor(author: Author, adminId): Promise<Author>{
-        this.userService.isAdmin(adminId)
+        await this.userService.isAdmin(adminId)
         return await this.authorRepository.save(author)
     }
 }
